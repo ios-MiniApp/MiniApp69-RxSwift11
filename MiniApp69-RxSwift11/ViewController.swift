@@ -6,12 +6,41 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class ViewController: UIViewController {
 
+    @IBOutlet private weak var badLabel: UILabel!
+    @IBOutlet private weak var goodLabel: UILabel!
+    @IBOutlet private weak var badButton: UIButton!
+    @IBOutlet private weak var goodButton: UIButton!
+
+    private let disposeBag = DisposeBag()
+
+    var viewModel: ViewModel?
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+
+        viewModel = ViewModel(
+            badButtonObservable: badButton.rx.tap.asObservable(),
+            goodButtonObservable: goodButton.rx.tap.asObservable()
+        )
+
+        viewModel?.badNumObservable
+            .subscribe(onNext: { count in
+                self.badLabel.text = String(count)
+            })
+            .disposed(by: disposeBag)
+
+        viewModel?.goodNumObservable
+            .subscribe(onNext: { count in
+                self.goodLabel.text = String(count)
+            })
+            .disposed(by: disposeBag)
+
+
     }
 
 
