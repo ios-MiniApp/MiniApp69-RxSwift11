@@ -19,7 +19,7 @@ class ViewModel {
 
     init(badButtonObservable: Observable<Void>, goodButtonObservable: Observable<Void>){
 
-        badButtonObservable
+        badButtonObservable.asObservable()
             .subscribe(onNext: { [weak self] in
                 self?.badNum += 1
                 self?.badNumObservable.onNext(self?.badNum ?? 0)
